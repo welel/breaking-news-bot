@@ -2,10 +2,9 @@ import asyncio
 import logging
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import ParseMode
 
 from config import Config, load_config
-from handlers import echo
+from handlers import user_handlers
 
 
 logger = logging.getLogger(__name__)
@@ -22,10 +21,10 @@ async def main():
 
     config: Config = load_config()
 
-    bot: Bot = Bot(token=config.tg_bot.token, parse_mode=ParseMode.HTML)
+    bot: Bot = Bot(token=config.tg_bot.token, parse_mode="HTML")
     dp: Dispatcher = Dispatcher()
 
-    dp.include_router(echo.router)
+    dp.include_router(user_handlers.router)
 
     await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot)

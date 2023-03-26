@@ -1,15 +1,8 @@
-# AIOgram Telegram Bot Template
+# Breaking News Telegram Bot
 
-A simple structure for creating telegram bots using AIOgram 3.
+![aiogram](https://img.shields.io/badge/python-v3.10-blue.svg?logo=python&logoColor=yellow) ![aiogram](https://img.shields.io/badge/aiogram-v3-blue.svg?logo=telegram)
 
----
-***Readme template:***
-
-# [project name]
-
-![aiogram](https://img.shields.io/badge/python-v3.10-blue.svg?logo=python&logoColor=yellow) ![aiogram](https://img.shields.io/badge/aiogram-v3-blue.svg?logo=telegram) ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-
-About...
+A Telegram bot that delivers breaking news headlines related to technology. This bot is designed to keep users up to date with the latest news and developments in the tech industry. With its ability to source breaking news from various publications, blogs, and news websites, the bot delivers reliable and relevant news to its users.
 
 ## Features
 
@@ -29,7 +22,8 @@ The bot has several commands that can be used to access its features:
 
 - Python v3.10
 - aiogram v3
-- dotenv v1
+- dotenv v1 - for the bot configuration
+- [newsapi-python](https://github.com/mattlisiv/newsapi-python) - for using [NewsAPI](https://newsapi.org/)
 
 ## Installation
 
