@@ -3,7 +3,7 @@ import os
 
 from newsapi import NewsApiClient
 
-from models.news import News
+from src.models.news import News
 
 
 class NewsClient:
@@ -21,6 +21,8 @@ class NewsClient:
         >>> new_news = NewsClient.get_new_news()
 
     """
+
+    last_loaded_news_path: str = "last_loaded_news_object.pickle"
 
     @classmethod
     def set_api_key(cls, api_key: str) -> None:
@@ -42,7 +44,9 @@ class NewsClient:
         Raises:
             NewsAPIException: If a request to the API is failed.
         """
-        data = cls.api.get_top_headlines(country="us", category="technology", page=100)
+        data = cls.api.get_top_headlines(
+            country="us", category="technology", page_size=10
+        )
         if data["totalResults"] > 0:
             return tuple([News(**article) for article in data["articles"]])
         return tuple()
@@ -85,9 +89,8 @@ class NewsClient:
         if not news_list:
             return tuple()
 
-        last_loaded_news_path = "last_loaded_news_object.pickle"
-        last_loaded_news = cls._load_last_loaded_news(last_loaded_news_path)
-        cls._dump_last_loaded_news(last_loaded_news_path, news_list[0])
+        last_loaded_news = cls._load_last_loaded_news(cls.last_loaded_news_path)
+        cls._dump_last_loaded_news(cls.last_loaded_news_path, news_list[0])
 
         if last_loaded_news:
             for i, news in enumerate(news_list):
@@ -102,7 +105,7 @@ class NewsClient:
         Returns:
             The last loaded news object or None.
         """
-        if news := cls._load_last_loaded_news():
+        if news := cls._load_last_loaded_news(cls.last_loaded_news_path):
             return news
         elif news_list := cls.fetch_last_news():
             return news_list[0]

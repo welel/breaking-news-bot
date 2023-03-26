@@ -2,19 +2,32 @@ from aiogram import Bot, Router
 from aiogram.types import Message
 from aiogram.filters import CommandStart
 
-from services.news import NewsClient
-from services.storage import StorageClient
+from config import load_config
+from src.services.news import NewsClient
+from src.services.storage import UserStorageClient
+from src.services.storage.sqlitestorage import SQLiteUserStorage
+from src.middlewares.storage import UserStorageMiddleware
 
 
-router: Router = Router()
+router = Router()
+config = load_config()
+router.message.middleware(
+    UserStorageMiddleware(UserStorageClient(SQLiteUserStorage(path=config.sqlite.path)))
+)
+NewsClient.set_api_key(config.newsapi.token)
 
 
 @router.message(CommandStart())
-async def process_start_command(message: Message, bot: Bot):
-    await StorageClient.save_user(message.from_user.id)
-    await bot.send_message(message.chat.id, text="The bot ...")
-    last_message = NewsClient.get_last_news()
-    await bot.send_message()  # send news
+async def process_start_command(
+    message: Message, bot: Bot, user_storage: UserStorageClient
+):
+    await user_storage.save(message.from_user.id)
+    await bot.send_message(
+        message.chat.id,
+        text="The bot delivers breaking news headlines related to technology.",
+    )
+    last_news = NewsClient.get_last_news()
+    await bot.send_message(message.chat.id, text=last_news.title)
 
 
 @router.message()

@@ -4,7 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher
 
 from config import Config, load_config
-from handlers import user_handlers
+from src.handlers import user_handlers
 
 
 logger = logging.getLogger(__name__)

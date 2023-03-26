@@ -32,10 +32,10 @@ class UserStorageClient(UserStorageInterface):
         self.storage = storage
 
     async def save(self, user_id: int) -> None:
-        return await self.storage.save()
+        return await self.storage.save(user_id)
 
     async def all(self) -> tuple[int]:
         return await self.storage.all()
 
     async def delete(self, user_id: int) -> None:
-        return await self.storage.delete()
+        return await self.storage.delete(user_id)
