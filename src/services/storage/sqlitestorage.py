@@ -1,13 +1,11 @@
-import asyncio
-import os
 import sqlite3
 
 import aiosqlite
 
-# from .base import UserStorageInterface
+from .base import UserStorageInterface
 
 
-class SQLiteUserStorageClient:  # (UserStorageInterface):
+class SQLiteUserStorage(UserStorageInterface):
     def __init__(self, path: str):
         self.path = path
         self.user_table_name = "users"
@@ -17,29 +15,27 @@ class SQLiteUserStorageClient:  # (UserStorageInterface):
         with sqlite3.connect(self.path) as db:
             cursor = db.cursor()
 
-            # Execute a query to check if the table exists
+            # Creates a user table if it doesn't exist
             cursor.execute(
-                f"SELECT name FROM sqlite_master WHERE type='table' AND name='{self.user_table_name}'"
+                """CREATE TABLE IF NOT EXISTS users
+                                (id INTEGER PRIMARY KEY,
+                                user_id INTEGER UNIQUE)"""
             )
-            if cursor.fetchone() is None:
-                # Create databse
-                cursor.execute(
-                    str(
-                        "CREATE TABLE users "
-                        "(id INTEGER PRIMARY KEY, "
-                        "user_id INTEGER)"
-                    )
-                )
 
-    async def test_connection(self):
-        async with aiosqlite.connect("sqlite.db") as db:
-            return await db.execute("SELECT	1 + 1;")
+    async def save(self, user_id: int) -> None:
+        async with aiosqlite.connect(self.path) as db:
+            await db.execute(
+                "INSERT OR IGNORE INTO users (user_id) VALUES (?)", (user_id,)
+            )
+            await db.commit()
 
+    async def all(self) -> tuple[int]:
+        async with aiosqlite.connect(self.path) as db:
+            async with db.execute("SELECT * FROM users") as cursor:
+                users = await cursor.fetchall()
+                return tuple([user_id for _, user_id in users])
 
-async def main():
-    storage = SQLiteUserStorageClient(path="sql.db")
-    print(await storage.test_connection())
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
+    async def delete(self, user_id: int) -> None:
+        async with aiosqlite.connect(self.path) as db:
+            await db.execute("DELETE FROM users WHERE user_id=?", (user_id,))
+            await db.commit()
