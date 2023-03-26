@@ -10,11 +10,7 @@ from src.middlewares.storage import UserStorageMiddleware
 
 
 router = Router()
-config = load_config()
-router.message.middleware(
-    UserStorageMiddleware(UserStorageClient(SQLiteUserStorage(path=config.sqlite.path)))
-)
-NewsClient.set_api_key(config.newsapi.token)
+NewsClient.set_api_key(load_config().newsapi.token)
 
 
 @router.message(CommandStart())
