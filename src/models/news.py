@@ -1,11 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class News(BaseModel):
     title: str
     description: str | None
     url: str
-    urlToImage: str | None
+    image_url: str | None = Field(alias="urlToImage")
 
     class Config:
         extra = "allow"

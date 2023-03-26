@@ -3,6 +3,7 @@ from aiogram.types import Message
 from aiogram.filters import CommandStart
 
 from config import load_config
+from src.formatters.news import news_format
 from src.services.news import NewsClient
 from src.services.storage import UserStorageClient
 from src.services.storage.sqlitestorage import SQLiteUserStorage
@@ -23,7 +24,7 @@ async def process_start_command(
         text="The bot delivers breaking news headlines related to technology.",
     )
     last_news = NewsClient.get_last_news()
-    await bot.send_message(message.chat.id, text=last_news.title)
+    await bot.send_message(message.chat.id, text=news_format(last_news))
 
 
 @router.message()

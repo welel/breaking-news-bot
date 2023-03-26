@@ -40,7 +40,7 @@ async def main():
     dp.include_router(user_handlers.router)
 
     scheduler.add_job(
-        send_last_news_to_users, "cron", second="*/5", args=(bot, user_storage)
+        send_last_news_to_users, "cron", hour="*", args=(bot, user_storage)
     )
     scheduler.start()
     await bot.delete_webhook(drop_pending_updates=True)

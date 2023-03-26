@@ -1,11 +1,12 @@
 import asyncio
 import logging
 
-from aiogram import Bot, exceptions
+from aiogram import Bot
 
 from config import load_config
 from src.services.news import NewsClient
 from src.services.storage import UserStorageClient
+from src.formatters.news import news_format
 
 NewsClient.set_api_key(load_config().newsapi.token)
 
@@ -18,8 +19,10 @@ async def send_last_news_to_users(bot: Bot, user_storage: UserStorageClient):
         for user_id in users_ids:
             try:
                 await bot.send_message(
-                    user_id, text=news.title, disable_notification=True
+                    user_id, text=news_format(news), disable_notification=True
                 )
             except Exception as e:
-                print(f"[SendNewsFaild]: {e}; user id {user_id}; {type(news)}; {news}")
+                logging.error(
+                    f"[SendNewsFaild]: {e}; user id {user_id}; {type(news)}; {news}"
+                )
             await asyncio.sleep(1)
