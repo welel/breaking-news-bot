@@ -1,3 +1,12 @@
+"""This module contains abstractions for the user storage.
+
+Classes:
+
+    UserStorageInterface: An abstract base class for user storage.
+    UserStorageClient: A class that serves as a client to interact
+        with the user storage.
+
+"""
 import abc
 
 
@@ -19,7 +28,7 @@ class UserStorageInterface(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    async def all(self) -> list[int]:
+    async def all(self) -> tuple[int]:
         raise NotImplementedError
 
     @abc.abstractmethod

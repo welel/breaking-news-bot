@@ -12,6 +12,7 @@ NewsClient.set_api_key(load_config().newsapi.token)
 
 
 async def send_last_news_to_users(bot: Bot, user_storage: UserStorageClient):
+    """Sends the latest news to all users in the user storage."""
     new_news = NewsClient.get_new_news_list()
     users_ids = await user_storage.all()
 

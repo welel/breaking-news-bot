@@ -18,6 +18,7 @@ NewsClient.set_api_key(load_config().newsapi.token)
 async def process_start_command(
     message: Message, bot: Bot, user_storage: UserStorageClient
 ):
+    """Sends a welcome message along with the last news article."""
     await user_storage.save(message.from_user.id)
     await bot.send_message(
         message.chat.id,
@@ -29,4 +30,5 @@ async def process_start_command(
 
 @router.message()
 async def process_any_message(message: Message):
+    """Notifies the user that the bot is only intended for sending news articles."""
     await message.reply(text="The bot is not intended for messages. It sends the news.")

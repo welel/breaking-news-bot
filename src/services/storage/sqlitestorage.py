@@ -6,12 +6,21 @@ from .base import UserStorageInterface
 
 
 class SQLiteUserStorage(UserStorageInterface):
+    """A user storage implementation that stores user IDs in an SQLite database.
+
+    Attributes:
+        path (str): The path to the SQLite database file.
+        user_table_name (str): The name of the table that stores user IDs.
+
+    """
+
     def __init__(self, path: str):
         self.path = path
         self.user_table_name = "users"
         self._init_database()
 
     def _init_database(self):
+        """Initializes the database by creating a user table if it doesn't exist."""
         with sqlite3.connect(self.path) as db:
             cursor = db.cursor()
 

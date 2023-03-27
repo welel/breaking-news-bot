@@ -7,6 +7,13 @@ from src.services.storage import UserStorageClient
 
 
 class UserStorageMiddleware(BaseMiddleware):
+    """A middleware that adds a user storage client.
+
+    This middleware is used to add the user storage client to the event
+    data dict, which can be used in subsequent handlers or middlewares.
+
+    """
+
     def __init__(self, user_storage: UserStorageClient) -> None:
         self.user_storage = user_storage
 
