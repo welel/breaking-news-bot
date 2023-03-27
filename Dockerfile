@@ -8,4 +8,6 @@ COPY . .
 
 RUN pip install -r requirements/production.txt
 
+VOLUME /newsbot/data
+
 CMD ["python", "bot.py"]

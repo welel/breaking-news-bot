@@ -22,7 +22,7 @@ class NewsClient:
 
     """
 
-    last_loaded_news_path: str = "last_loaded_news_object.pickle"
+    last_loaded_news_path: str = "data/last_loaded_news_object.pickle"
 
     @classmethod
     def set_api_key(cls, api_key: str) -> None:
