@@ -1,13 +1,16 @@
-FROM python:3.10
+FROM python:3.10-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1 
+WORKDIR /app
 
-WORKDIR /newsbot
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+COPY requirements/ requirements/
+
+RUN pip install --upgrade pip \
+        && pip install -r requirements/production.txt \
+        && rm -rf requirements
+
 COPY . .
 
-RUN pip install -r requirements/production.txt
-
-VOLUME /newsbot/data
-
-CMD ["python", "bot.py"]
+CMD ["python", "./bot.py"]
