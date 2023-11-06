@@ -1,6 +1,7 @@
 # Project
 *.pickle
 *.db
+*.sqlite
 
 
 # Byte-compiled / optimized / DLL files
