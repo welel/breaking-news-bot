@@ -1,15 +1,16 @@
 FROM python:3.10-slim
 
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+    
 WORKDIR /app
-
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
 
 COPY requirements/ requirements/
 
 RUN pip install --upgrade pip \
-        && pip install -r requirements/production.txt \
-        && rm -rf requirements
+    && pip install --no-cache-dir -r requirements/production.txt \
+    && rm -rf requirements
 
 COPY . .
 
